@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gkr_api_endpoint">http://www.giftkoeder-radar.com/v2</string>
+    <!-- please make sure to add this file not to your SCM -->
+    <integer name="gkr_api_id">-1</integer>
+    <string name="gkr_api_pass">YOUR_GKR_API_KEY_HERE</string>
+    <string name="maps_apikey">YOUR_MAP_API_KEY_HERE</string>
+</resources>
