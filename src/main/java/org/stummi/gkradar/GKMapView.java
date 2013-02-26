@@ -7,10 +7,11 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
+import com.readystatesoftware.maps.OnSingleTapListener;
+import com.readystatesoftware.maps.TapControlledMapView;
 
-public class GKMapView extends MapView {
+public class GKMapView extends TapControlledMapView {
 	private static final String TAG = "GKMapView";
 	private int currentZoomLevel = -1;
 	private GeoPoint currentCenter;
@@ -35,7 +36,8 @@ public class GKMapView extends MapView {
 	}
 
 	private void init() {
-		this.gkoverlay = new GKOverlay(getContext());
+		this.gkoverlay = new GKOverlay(getContext(), this);
+		getOverlays().add(gkoverlay);
 		this.myLocationOverlay = new MyLocationOverlay(getContext(), this);
 		myLocationOverlay.runOnFirstFix(new Runnable() {
 			@Override
@@ -43,9 +45,17 @@ public class GKMapView extends MapView {
 				updateLocation();
 			}
 		});
-		getOverlays().add(gkoverlay);
+		
 		getOverlays().add(myLocationOverlay);
 		setBuiltInZoomControls(true);
+		
+		setOnSingleTapListener(new OnSingleTapListener() {		
+			@Override
+			public boolean onSingleTap(MotionEvent e) {
+				gkoverlay.hideAllBalloons();
+				return true;
+			}
+		});
 	}
 
 	private void updateLocation() {

@@ -2,7 +2,7 @@ package org.stummi.gkradar.api;
 
 import com.google.gson.annotations.Expose;
 
-public class Location {
+public class GKLocation {
 	@Expose
 	String id;
 	
@@ -133,9 +133,9 @@ public class Location {
 		if(o == null)
 			return false;
 		
-		if(!(o instanceof Location))
+		if(!(o instanceof GKLocation))
 			return false;
-		return ((Location)o).id.equals(id);
+		return ((GKLocation)o).id.equals(id);
 	}
 	
 	

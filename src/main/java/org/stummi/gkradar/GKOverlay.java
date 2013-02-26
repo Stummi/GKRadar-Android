@@ -3,36 +3,39 @@ package org.stummi.gkradar;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.stummi.gkradar.api.GKLocation;
 import org.stummi.gkradar.api.GKLocationsCallback;
 import org.stummi.gkradar.api.GKProvider;
-import org.stummi.gkradar.api.Location;
 import org.stummi.gkradar.api.State;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.widget.Toast;
 
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.ItemizedOverlay;
-import com.google.android.maps.OverlayItem;
+import com.google.android.maps.MapView;
+import com.readystatesoftware.mapviewballoons.BalloonItemizedOverlay;
 
 /**
  * Map-Overlay which displays the found locations
  * 
  * @author stummi
  */
-public class GKOverlay extends ItemizedOverlay<OverlayItem> implements
+public class GKOverlay extends BalloonItemizedOverlay<GKOverlayItem> implements
 		GKLocationsCallback {
 	private static final String TAG = "GKOverlay";
 	private GKProvider provider;
-	private ArrayList<Location> locations;
+	private ArrayList<GKLocation> locations;
 	private Context context;
 
 	private HashMap<State, Drawable> drawables;
 	private Object populateLock = new Object();
 
-	public GKOverlay(Context c) {
-		super(createDefaultDrawable(c));
+	public GKOverlay(Context c, MapView mapView) {
+		super(createDefaultDrawable(c), mapView);
+		setBalloonBottomOffset(50);
+		setShowDisclosure(true);
+		setShowClose(false);
 		this.provider = new GKProvider(c);
 		this.context = c;
 		initIcons();
@@ -53,7 +56,8 @@ public class GKOverlay extends ItemizedOverlay<OverlayItem> implements
 	}
 
 	private void initLocations() {
-		this.locations = new ArrayList<Location>();
+		locations = new ArrayList<GKLocation>();
+		populate();
 		provider.requestOverview(this);
 	}
 
@@ -63,13 +67,12 @@ public class GKOverlay extends ItemizedOverlay<OverlayItem> implements
 	}
 
 	@Override
-	protected OverlayItem createItem(int i) {
-		Location l = locations.get(i);
-		OverlayItem oi = new OverlayItem(new GeoPoint(
-				(int) (l.getLatitude() * 1000000L),
-				(int) (l.getLongitude() * 1000000L)), "foo", "bar");
-		oi.setMarker(drawables.get(l.getStatus()));
-		return oi;
+	protected GKOverlayItem createItem(int i) {
+		GKLocation l = locations.get(i);
+		Log.d(TAG, "createItem: " + l);
+		GKOverlayItem gkoi = new GKOverlayItem(l);
+		gkoi.setMarker(drawables.get(l.getStatus()));
+		return gkoi;
 	}
 
 	@Override
@@ -82,9 +85,9 @@ public class GKOverlay extends ItemizedOverlay<OverlayItem> implements
 	}
 
 	@Override
-	public void newLocations(Location[] location) {
+	public void newLocations(GKLocation[] location) {
 		synchronized (populateLock) {
-			for (Location l : location) {
+			for (GKLocation l : location) {
 				if (locations.contains(l)) {
 					continue;
 				}
@@ -106,6 +109,13 @@ public class GKOverlay extends ItemizedOverlay<OverlayItem> implements
 		synchronized (populateLock) {
 			return super.getIndexToDraw(drawingOrder);
 		}
+	}
+
+	@Override
+	protected boolean onBalloonTap(int index, GKOverlayItem item) {
+		Toast.makeText(context, item.getLocation().getDescription(),
+				Toast.LENGTH_LONG).show();
+		return true;
 	}
 
 }
