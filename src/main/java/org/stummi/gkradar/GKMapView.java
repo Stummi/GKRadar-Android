@@ -43,8 +43,6 @@ public class GKMapView extends MapView {
 				updateLocation();
 			}
 		});
-		myLocationOverlay.enableMyLocation();
-		myLocationOverlay.enableCompass();
 		getOverlays().add(gkoverlay);
 		getOverlays().add(myLocationOverlay);
 		setBuiltInZoomControls(true);
@@ -119,5 +117,15 @@ public class GKMapView extends MapView {
 			currentZoomLevel = getZoomLevel();
 			updateMap();
 		}
+	}
+
+	public void onResume() {
+		myLocationOverlay.enableMyLocation();
+		myLocationOverlay.enableCompass();		
+	}
+	
+	public void onPause() {
+		myLocationOverlay.disableMyLocation();
+		myLocationOverlay.disableCompass();		
 	}
 }
