@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
+import com.google.android.maps.MyLocationOverlay;
 
 public class GKMapView extends MapView {
 	private static final String TAG = "GKMapView";
@@ -16,6 +17,7 @@ public class GKMapView extends MapView {
 	private GKOverlay gkoverlay;
 	private static final int EQUATOR_METERS = 40075035;
 	private static final double METERS_PER_PIXEL_ZOOM_0 = EQUATOR_METERS / 128;
+	private MyLocationOverlay myLocationOverlay;
 
 	public GKMapView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -34,7 +36,25 @@ public class GKMapView extends MapView {
 
 	private void init() {
 		this.gkoverlay = new GKOverlay(getContext());
+		this.myLocationOverlay = new MyLocationOverlay(getContext(), this);
+		myLocationOverlay.runOnFirstFix(new Runnable() {
+			@Override
+			public void run() {
+				updateLocation();
+			}
+		});
+		myLocationOverlay.enableMyLocation();
+		myLocationOverlay.enableCompass();
 		getOverlays().add(gkoverlay);
+		getOverlays().add(myLocationOverlay);
+		setBuiltInZoomControls(true);
+	}
+
+	private void updateLocation() {
+		currentCenter = myLocationOverlay.getMyLocation();
+		getController().animateTo(currentCenter);
+		getController().setZoom(15);
+		updateMap();
 	}
 
 	public boolean onTouchEvent(MotionEvent ev) {
@@ -69,7 +89,7 @@ public class GKMapView extends MapView {
 			return;
 		int radius = getVisibleRadiusMeters();
 		if (radius < 1000000) {
-			if(radius > 100000)
+			if (radius > 100000)
 				radius = 100000;
 			double latitude = currentCenter.getLatitudeE6() / 1000000D;
 			double longitude = currentCenter.getLongitudeE6() / 1000000D;
