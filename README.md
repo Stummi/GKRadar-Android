@@ -13,9 +13,14 @@ What Works
 ----------
 - Code provides the basic infrastructure to work with the API and displaying 
   the results to the Map
+- Obtain the User-Location automatically
 
 Roadmap
 -------
-- Obtain the User-Location automatically
 - Widget
 - Configuration dialog
+
+Screenshots
+-----------
+<img src="/doc/screenshot/screenshot1.png">
+<img src="/doc/screenshot/screenshot2.png">
