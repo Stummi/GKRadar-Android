@@ -33,7 +33,7 @@ public class GKOverlay extends BalloonItemizedOverlay<GKOverlayItem> implements
 
 	public GKOverlay(Context c, MapView mapView) {
 		super(createDefaultDrawable(c), mapView);
-		setBalloonBottomOffset(50);
+		setBalloonBottomOffset(70);
 		setShowDisclosure(true);
 		setShowClose(false);
 		this.provider = new GKProvider(c);
@@ -50,8 +50,14 @@ public class GKOverlay extends BalloonItemizedOverlay<GKOverlayItem> implements
 	}
 
 	private void loadDrawable(State state, int id) {
-		Drawable drawable = boundCenterBottom(context.getResources()
-				.getDrawable(id));
+		Drawable drawable = context.getResources().getDrawable(id);
+		int width = drawable.getIntrinsicWidth();
+		int height = drawable.getIntrinsicHeight();
+		int left = (int) (width * 0.4);
+		int right = width-left;
+		int top = height - 1;
+		int bbottom = 1;
+		drawable.setBounds(-left, -top, right, bbottom);
 		drawables.put(state, drawable);
 	}
 
