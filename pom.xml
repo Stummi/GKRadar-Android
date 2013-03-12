@@ -53,6 +53,7 @@
         <artifactId>android-maven-plugin</artifactId>
         <version>3.0.0</version>
         <configuration>
+          <sign><debug>false</debug></sign>
           <deleteConflictingFiles>true</deleteConflictingFiles>
           <undeployBeforeDeploy>true</undeployBeforeDeploy>
           <sdk>
