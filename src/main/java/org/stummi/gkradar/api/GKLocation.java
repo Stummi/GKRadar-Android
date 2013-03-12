@@ -1,8 +1,12 @@
 package org.stummi.gkradar.api;
 
+import java.io.Serializable;
+
 import com.google.gson.annotations.Expose;
 
-public class GKLocation {
+public class GKLocation implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	@Expose
 	String id;
 	
@@ -37,19 +41,10 @@ public class GKLocation {
 	double longitude;
 	
 	@Expose
-	String date;
+	String created;
 	
 	@Expose
 	String source;
-	
-	@Expose
-	boolean notification_push;
-	
-	@Expose
-	boolean notification_email;
-	
-	@Expose
-	boolean notification_sms;
 	
 	@Expose
 	String permalink;
@@ -98,24 +93,12 @@ public class GKLocation {
 		return longitude;
 	}
 
-	public String getDate() {
-		return date;
+	public String getCreated() {
+		return created;
 	}
 
 	public String getSource() {
 		return source;
-	}
-
-	public boolean isNotification_push() {
-		return notification_push;
-	}
-
-	public boolean isNotification_email() {
-		return notification_email;
-	}
-
-	public boolean isNotification_sms() {
-		return notification_sms;
 	}
 
 	public String getPermalink() {

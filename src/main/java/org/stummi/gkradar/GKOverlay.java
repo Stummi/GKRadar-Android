@@ -9,9 +9,9 @@ import org.stummi.gkradar.api.GKProvider;
 import org.stummi.gkradar.api.State;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.maps.MapView;
 import com.readystatesoftware.mapviewballoons.BalloonItemizedOverlay;
@@ -119,8 +119,9 @@ public class GKOverlay extends BalloonItemizedOverlay<GKOverlayItem> implements
 
 	@Override
 	protected boolean onBalloonTap(int index, GKOverlayItem item) {
-		Toast.makeText(context, item.getLocation().getDescription(),
-				Toast.LENGTH_LONG).show();
+		Intent i = new Intent(context, DetailActivity.class);
+		i.putExtra("gklocation", item.getLocation());
+		context.startActivity(i); 		
 		return true;
 	}
 
