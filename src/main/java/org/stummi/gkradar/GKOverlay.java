@@ -75,7 +75,6 @@ public class GKOverlay extends BalloonItemizedOverlay<GKOverlayItem> implements
 	@Override
 	protected GKOverlayItem createItem(int i) {
 		GKLocation l = locations.get(i);
-		Log.d(TAG, "createItem: " + l);
 		GKOverlayItem gkoi = new GKOverlayItem(l);
 		gkoi.setMarker(drawables.get(l.getStatus()));
 		return gkoi;

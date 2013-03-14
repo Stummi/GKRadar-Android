@@ -11,20 +11,8 @@ public class GKOverlayItem extends OverlayItem {
 
 	public GKOverlayItem(GKLocation gkl) {
 		super(pointFromLocation(gkl), titleFromLocation(gkl),
-				snippetFromLocation(gkl));
+				gkl.getAddress());
 		this.location = gkl;
-	}
-
-	private static String snippetFromLocation(GKLocation l) {
-		StringBuilder sb = new StringBuilder();
-		String street = l.getStreet();
-		if (street != null && street.length() > 0) {
-			sb.append(street + "\n");
-		}
-		sb.append(l.getZipcode());
-		sb.append(" ");
-		sb.append(l.getCity());
-		return sb.toString();
 	}
 
 	private static String titleFromLocation(GKLocation l) {

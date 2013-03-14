@@ -9,43 +9,43 @@ public class GKLocation implements Serializable {
 
 	@Expose
 	String id;
-	
+
 	@Expose
 	State status;
-	
+
 	@Expose
 	Category category;
-	
+
 	@Expose
 	String title;
-	
+
 	@Expose
 	String description;
-	
+
 	@Expose
 	String country;
-	
+
 	@Expose
 	String street;
-	
-	@Expose 
+
+	@Expose
 	String zipcode;
-	
+
 	@Expose
 	String city;
-	
+
 	@Expose
 	double latitude;
-	
+
 	@Expose
 	double longitude;
-	
+
 	@Expose
 	String created;
-	
+
 	@Expose
 	String source;
-	
+
 	@Expose
 	String permalink;
 
@@ -104,22 +104,31 @@ public class GKLocation implements Serializable {
 	public String getPermalink() {
 		return permalink;
 	}
-	
-	
+
 	@Override
 	public int hashCode() {
 		return id.hashCode();
 	}
-	
+
 	@Override
 	public boolean equals(Object o) {
-		if(o == null)
+		if (o == null)
 			return false;
-		
-		if(!(o instanceof GKLocation))
+
+		if (!(o instanceof GKLocation))
 			return false;
-		return ((GKLocation)o).id.equals(id);
+		return ((GKLocation) o).id.equals(id);
 	}
-	
-	
+
+	public String getAddress() {
+		StringBuilder sb = new StringBuilder();
+		if (street != null && street.length() > 0) {
+			sb.append(street + "\n");
+		}
+		sb.append(zipcode);
+		sb.append(" ");
+		sb.append(city);
+		return sb.toString();
+	}
+
 }

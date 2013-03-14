@@ -2,5 +2,10 @@
 <resources>
 
     <string name="detail_date">Datum</string>
+    <string name="detail_source">Quelle</string>
+    <string name="detail_location">Ort</string>
+    <string name="detail_state">Status</string>
+    <string name="state_official">Bestätigt</string>
+    <string name="state_hunch">Verdacht</string>
 
 </resources>
