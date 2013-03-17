@@ -3,6 +3,7 @@ package org.stummi.gkradar;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.stummi.gkradar.api.GKApiGetLocationRequest;
 import org.stummi.gkradar.api.GKLocation;
 import org.stummi.gkradar.api.GKLocationsCallback;
 import org.stummi.gkradar.api.GKProvider;
@@ -13,6 +14,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
+import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.readystatesoftware.mapviewballoons.BalloonItemizedOverlay;
 
@@ -54,7 +56,7 @@ public class GKOverlay extends BalloonItemizedOverlay<GKOverlayItem> implements
 		int width = drawable.getIntrinsicWidth();
 		int height = drawable.getIntrinsicHeight();
 		int left = (int) (width * 0.4);
-		int right = width-left;
+		int right = width - left;
 		int top = height - 1;
 		int bbottom = 1;
 		drawable.setBounds(-left, -top, right, bbottom);
@@ -85,8 +87,10 @@ public class GKOverlay extends BalloonItemizedOverlay<GKOverlayItem> implements
 		return locations.size();
 	}
 
-	public void updateMap(double latitude, double longitude, int radius) {
-		provider.requestLocationData(this, latitude, longitude, radius);
+	public void updateMap(GeoPoint location, int radius) {
+		GKApiGetLocationRequest request = new GKApiGetLocationRequest().location(
+				location).radius(radius);
+		provider.requestLocationData(request, this);
 	}
 
 	@Override
@@ -120,7 +124,7 @@ public class GKOverlay extends BalloonItemizedOverlay<GKOverlayItem> implements
 	protected boolean onBalloonTap(int index, GKOverlayItem item) {
 		Intent i = new Intent(context, DetailActivity.class);
 		i.putExtra("gklocation", item.getLocation());
-		context.startActivity(i); 		
+		context.startActivity(i);
 		return true;
 	}
 

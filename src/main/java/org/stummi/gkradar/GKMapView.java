@@ -2,6 +2,7 @@ package org.stummi.gkradar;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.location.Location;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -99,25 +100,33 @@ public class GKMapView extends TapControlledMapView {
 		if (radius < 1000000) {
 			if (radius > 100000)
 				radius = 100000;
-			double latitude = currentCenter.getLatitudeE6() / 1000000D;
-			double longitude = currentCenter.getLongitudeE6() / 1000000D;
-			gkoverlay.updateMap(latitude, longitude, radius);
+			//double latitude = currentCenter.getLatitudeE6() / 1000000D;
+			//double longitude = currentCenter.getLongitudeE6() / 1000000D;
+			gkoverlay.updateMap(currentCenter, radius);
 		}
 	}
 
 	// quick'n'hacky
 	public int getVisibleRadiusMeters() {
-		int zoomLevel = getZoomLevel();
-		int width = getWidth();
-		int height = getHeight();
-		int pxRadius = (int) (Math.sqrt(width * width + height * height) / 2);
+		int latSpan = getLatitudeSpan();
+		int lonSpan = getLongitudeSpan();
+		int latCenter = currentCenter.getLatitudeE6();
+		int lonCenter = currentCenter.getLongitudeE6();
+		int latTop = latCenter - latSpan/2; 
+		int latBottom = latCenter + latSpan/2;
+		int lonLeft = lonCenter - lonSpan/2;
+		int lonRight = lonCenter + lonSpan/2;
+		
+		Location topLeft = createLocation(latTop, lonLeft);
+		Location bottomRight = createLocation(latBottom, lonRight);
+		return (int)topLeft.distanceTo(bottomRight);
+	}
 
-		double metersPerPixel = METERS_PER_PIXEL_ZOOM_0;
-		for (int idx = 0; idx < zoomLevel; idx++) {
-			metersPerPixel /= 2D;
-		}
-		int metersRadius = (int) (pxRadius * metersPerPixel);
-		return metersRadius;
+	private Location createLocation(int latitude, int longitude) {
+		Location l = new Location("CALCULATED");
+		l.setLatitude(latitude/1000000D);
+		l.setLongitude(longitude/1000000D);
+		return l;
 	}
 
 	@Override
